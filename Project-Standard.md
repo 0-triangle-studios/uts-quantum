@@ -15,6 +15,5 @@ Game Plan {
         8 different ways
         3 qubits, in superposition
         Get result of 3 qubits, as index into lookup table
-        
     }
 }
