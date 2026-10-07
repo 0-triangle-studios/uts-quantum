@@ -1,19 +1,31 @@
 import pygame
+import time
+running = True
+
+def INC(x, max, mult):
+    return x + mult if x < max else 1
 
 ball_gravity = 0.0
+IDLE_index = 1
+IDLE_max = 5
+
+BALL_frame = 0
 
 #game logic
 def int_main():
     #do game stuff
+    global IDLE_index
+    global BALL_frame
+    tpmg = pygame.image.load("IDLE_" + str(IDLE_index) + ".jpg").convert_alpha()
+    IDLE_index = INC(IDLE_index, IDLE_max, 1)
 
     #draw commands
-    pygame.draw.rect(screen, (255, 0, 0), (100, 100, 150, 80))       # filled rect
-    pygame.draw.rect(screen, (0, 200, 0), (300, 100, 150, 80), 3)   # outlined rect
-    pygame.draw.circle(screen, (0, 0, 255), (500, 150), 60)         # filled circle
-    pygame.draw.line(screen, (255, 255, 0), (100, 300), (400, 400), 5)
-    pygame.draw.polygon(screen, (255, 100, 0), [(400, 300), (500, 450), (300, 450)])  # triangle
-
     screen.blit(tpmg, (0, 0))
+    pygame.draw.circle(screen, (0, 255, 255), (400, 300), BALL_frame)
+
+    BALL_frame = INC(BALL_frame, 30, 3)
+    
+
     #xinput
     for ev in pygame.event.get():
 
@@ -21,7 +33,8 @@ def int_main():
         if ev.type == pygame.KEYDOWN:
             if ev.key == pygame.K_SPACE:
                 print("Space pressed!")
-
+            if ev.key == pygame.K_TAB:
+                running = False
         # Mouse
         if ev.type == pygame.MOUSEBUTTONDOWN:
             if ev.button == 1:   # 1 = left click
@@ -30,15 +43,12 @@ def int_main():
 
 pygame.init()
 screen = pygame.display.set_mode((640, 480))
-tpmg = pygame.image.load("logo.png").convert_alpha()
 pygame.display.set_caption("My Window")
 
-running = True
 while running:
     # boilerplate code
-    for ev in pygame.event.get():
-        if ev.type == pygame.QUIT:
-            running = False
+    time.sleep(0.125)
+    print(running)
     screen.fill((30,30,30)) 
     int_main()
     #end boilerplate code
