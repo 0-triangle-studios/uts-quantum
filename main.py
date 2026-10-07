@@ -18,8 +18,6 @@ def qkc():
     #put all qubits into 3 classical bit string
     qc.measure([0, 1, 2], [0, 1, 2])
 
-    print(qc.draw())
-
     #run simulation
     backend = AerSimulator()
     result = backend.run(qc, shots=1).result()
@@ -58,7 +56,7 @@ HIT_TIMER = 0
 IDLE_index = 1
 IDLE_max = 5
 hit = False
-BALL_frame = 15
+BALL_frame = 0
 swing_index = 1
 swing_max = 3
 throw = {"speed": 0,"type": 0}
@@ -77,16 +75,12 @@ def int_main():
     #ball code
     if HIT_TIMER == 0:
         throw = qkc()
-        print(repr(throw))
         HIT_TIMER = throw['speed']*15+14
     else:
         HIT_TIMER = INC(HIT_TIMER, HIT_TIMER + 1, -1)
-    
-    print(HIT_TIMER)
 
     BALL_frame = min(14, max(0, INC(BALL_frame, 14, throw['speed']) if HIT_TIMER <= 14 else (14 if BALL_frame >= 14 else 0)))   
     ballmg = pygame.image.load(throw['type'] + str(BALL_frame).zfill(4) + ".jpg")
-    print("ball" + str(BALL_frame))
     #end ball code
     screen.blit(ballmg, (0,0))
     if not hit:
@@ -98,9 +92,13 @@ def int_main():
     else:
         tpmg = pygame.image.load("HIT_" + str(swing_index) + ".jpg")
         swing_index = swing_index + 1
+        tmps = swing_index
+        SCOREBOARD += BALL_frame
         if swing_index >= swing_max:
             hit = False
             swing_index = 1
+            print("You hit the ball and scored " + str(BALL_frame) + " points!")
+            print("Your score is now: " + str(SCOREBOARD))
 
         #draw
         screen.blit(tpmg, (0,0))
